@@ -1,2 +1,1 @@
-# elvisz.github.com
-Elvis's Home Page
+This blog base on [hubpress](http://hubpress.io)
