@@ -7,14 +7,14 @@
     "delay": "400"
   },
   "site": {
-    "title": "COOLJS.ME",
+    "title": "Elvis Zhong",
     "postsPerPage": "10",
     "googleAnalytics": "UA-72031894-1",
     "disqus": "elvisz",
     "url": "http://www.cooljs.me",
-    "description": "",
-    "logo": "https://avatars3.githubusercontent.com/u/776431?v=3&u=b62b2f69b952e1eb303e081c1ed685006856a12e&s=400",
-    "cover": "",
+    "description": "Web Developer, Wower",
+    "logo": "/images/elvisz.jpg",
+    "cover": "/images/idol.jpg",
     "delay": "400"
   },
   "socialnetwork": {
