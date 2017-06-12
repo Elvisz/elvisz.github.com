@@ -18,23 +18,6 @@
     "github": "https://github.com/Elvisz"
   },
   "theme": {
-    "name": "Casper",
-    "url": "//www.cooljs.me/themes/Casper"
-  },
-  "urls": {
-    "site": "http://www.cooljs.me",
-    "hubpress": "http://www.cooljs.me",
-    "theme": "//www.cooljs.me/themes/casper",
-    "images": "http://www.cooljs.me/images"
-  },
-  "initialisationConfigComponent": {
-    "name": "initialise-configuration",
-    "computed": {},
-    "methods": {},
-    "staticRenderFns": [
-      null,
-      null,
-      null
-    ]
+    "name": "ichi"
   }
 }
