@@ -11,13 +11,41 @@
     "postsPerPage": "10",
     "googleAnalytics": "UA-72031894-1",
     "disqus": "elvisz",
-    "url": "http://www.cooljs.me"
+    "url": "http://www.cooljs.me",
+    "description": "",
+    "logo": "https://avatars3.githubusercontent.com/u/776431?v=3&u=b62b2f69b952e1eb303e081c1ed685006856a12e&s=400",
+    "cover": "",
+    "delay": "400"
   },
   "socialnetwork": {
     "email": "33783229@qq.com",
-    "github": "https://github.com/Elvisz"
+    "github": "https://github.com/Elvisz",
+    "twitter": "",
+    "facebook": "",
+    "googleplus": "",
+    "instagram": "",
+    "pinterest": "",
+    "flickr": "",
+    "linkedin": "",
+    "stackoverflow": ""
   },
   "theme": {
     "name": "ichi"
+  },
+  "urls": {
+    "site": "http://www.cooljs.me",
+    "hubpress": "http://www.cooljs.me",
+    "theme": "//www.cooljs.me/themes/ichi",
+    "images": "http://www.cooljs.me/images"
+  },
+  "initialisationConfigComponent": {
+    "name": "initialise-configuration",
+    "computed": {},
+    "methods": {},
+    "staticRenderFns": [
+      null,
+      null,
+      null
+    ]
   }
 }
