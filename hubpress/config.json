@@ -30,12 +30,12 @@
     "stackoverflow": ""
   },
   "theme": {
-    "name": "ghostium"
+    "name": "ichi"
   },
   "urls": {
     "site": "http://www.cooljs.me",
     "hubpress": "http://www.cooljs.me",
-    "theme": "//www.cooljs.me/themes/ichi",
+    "theme": "//www.cooljs.me/themes/ghostium",
     "images": "http://www.cooljs.me/images"
   },
   "initialisationConfigComponent": {
