@@ -3,3 +3,5 @@
 // :published_at: 2019-01-31
 :hp-tags: Browser Compatibility, IE, Enhanced Protect Mode
 :hp-alt-title: Test IE False Positives
+
+https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
