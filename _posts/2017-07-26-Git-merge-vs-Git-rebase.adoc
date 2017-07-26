@@ -1,0 +1,5 @@
+= Survivorship Bias and Merge Conflict
+// :hp-image: /covers/cover.png
+// :published_at: 2019-01-31
+:hp-tags: Git, Git rebase, Git commit, Git merge
+:hp-alt-title: Git merge vs Git rebase
