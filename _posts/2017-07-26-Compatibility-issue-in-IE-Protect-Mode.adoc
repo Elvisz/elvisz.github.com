@@ -4,4 +4,6 @@
 :hp-tags: Browser Compatibility, IE, Enhanced Protect Mode
 :hp-alt-title: Compatibility issue in IE Protect Mode
 
-https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
+https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/[The Intranet Zone]
+
+https://github.com/Vestorly/torii/blob/0.6.1/lib/torii/services/popup.js#L79[torii source code]
