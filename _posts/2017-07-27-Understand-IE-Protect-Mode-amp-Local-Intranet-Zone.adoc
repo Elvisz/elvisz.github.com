@@ -24,7 +24,7 @@ Base on the error message, after search the _troii_ source code with "Popup coul
 
 [source,javascript]
 ----
-service.popup = window.open(url, pendingRequestKey, optionsString); // <1>
+service.popup = window.open(url, pendingRequestKey, optionsString); //// <1>
 
 if (service.popup && !service.popup.closed) {
   service.popup.focus();
@@ -47,7 +47,7 @@ We just enable the _IE Protect Mode_ on virtual machine, it can not connect Face
 
 _IE Protect Mode_ will cause `window.open()` return `null` as:
 
-[quote, https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx]
+[quote]
 ____
 Internet Explorer 7 on Windows Vista: Opening a new window from an application (other than the Internet Explorer process) may result in a null return value. This restriction occurs because Internet Explorer runs in protected mode, by default. One facet of protected mode prevents applications from having privileged access to Internet Explorer when that access spans process boundaries. Opening a new window by using this method generates a new process. For more information about protected mode, see https://msdn.microsoft.com/zh-cn/library/bb250462(v=vs.85).aspx[Understanding and Working in Protected Mode Internet Explorer]. This commonly occurs for applications that host the WebBrowser control.
 ____
@@ -75,11 +75,16 @@ How to know current site working in which security zone?::
 
 How does IE determine a site belongs Local Intranet Zone?::
 Instead, determination that a site belongs to the _Local Intranet Zone_ is based on a number of rules:
-[quote, https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/]
+[quote]
 ____
 * Direct Mapping. As with other Zones, users or network admins may map a list of URL patterns into the Local Intranet Zone. This list is viewable by clicking Tools > Internet Options > Security >  Local Intranet > Sites > Advanced.
 * The PlainHostName rule (aka "The Dot rule"). If the URI’s hostname doesn’t contain any periods (e.g. http://team/) then it is mapped to the Local Intranet Zone.
 * The fixed Proxy Bypass list. If the user has a fixed proxy specified inside Tools > Internet Options > Connections > LAN Settings, then sites listed to bypass that proxy will be mapped to the Local Intranet zone. The fixed proxy bypass list can be found by clicking the Advanced button; it’s at the bottom of the screen in the box labeled Exceptions.
 * (WPAD) Proxy Script. If the user’s proxy configuration is “Automatically detect settings” or “Use automatic configuration script” inside Tools > Internet Options > Connections > LAN Settings, the browser will run the FindProxyForUrl function in the specified WPAD proxy configuration script to determine which proxy should be used for each request. If the script returns "DIRECT", the browser will bypass the proxy and the site will be mapped into the Local Intranet Zone. When mapping a URL to a Zone, URLMon will call the FindProxyForUrl function to determine if the bypass rule applies. One interesting twist is that the proxy script may itself call dnsResolve to get a site’s IP address and use that information as a part of its determination.
 ____
+
+== References
+[bibliography]
+- https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx.
+- https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
 
