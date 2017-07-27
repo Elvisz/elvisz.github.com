@@ -84,7 +84,6 @@ ____
 ____
 
 == References
-[bibliography]
-- https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx.
-- https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
+. https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx.
+. https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
 
