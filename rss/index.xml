@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Elvis Zhong]]></title><description><![CDATA[Web Developer, Wower]]></description><link>http://www.cooljs.me</link><image><url>/images/idol.jpg</url><title>Elvis Zhong</title><link>http://www.cooljs.me</link></image><generator>RSS for Node</generator><lastBuildDate>Thu, 27 Jul 2017 15:22:40 GMT</lastBuildDate><atom:link href="http://www.cooljs.me/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Internet Explorer window.open() return null]]></title><description><![CDATA[<div id="toc" class="toc">
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Elvis Zhong]]></title><description><![CDATA[Web Developer, Wower]]></description><link>http://www.cooljs.me</link><image><url>/images/idol.jpg</url><title>Elvis Zhong</title><link>http://www.cooljs.me</link></image><generator>RSS for Node</generator><lastBuildDate>Thu, 27 Jul 2017 15:30:18 GMT</lastBuildDate><atom:link href="http://www.cooljs.me/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Internet Explorer window.open() return null]]></title><description><![CDATA[<div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_troii_facebook_can_not_connect">Troii Facebook can not connect</a></li>
@@ -14,6 +14,7 @@
 <li><a href="#_understand_security_zone">Understand Security Zone</a></li>
 </ul>
 </li>
+<li><a href="#_references">References</a></li>
 </ul>
 </div>
 <div class="sect1">
@@ -46,7 +47,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">service.popup = window.open(url, pendingRequestKey, optionsString); <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">service.popup = window.open(url, pendingRequestKey, optionsString); //<i class="conum" data-value="1"></i><b>(1)</b>
 
 if (service.popup &amp;&amp; !service.popup.closed) {
   service.popup.focus();
@@ -86,9 +87,6 @@ if (service.popup &amp;&amp; !service.popup.closed) {
 <p>Internet Explorer 7 on Windows Vista: Opening a new window from an application (other than the Internet Explorer process) may result in a null return value. This restriction occurs because Internet Explorer runs in protected mode, by default. One facet of protected mode prevents applications from having privileged access to Internet Explorer when that access spans process boundaries. Opening a new window by using this method generates a new process. For more information about protected mode, see <a href="https://msdn.microsoft.com/zh-cn/library/bb250462(v=vs.85).aspx">Understanding and Working in Protected Mode Internet Explorer</a>. This commonly occurs for applications that host the WebBrowser control.</p>
 </div>
 </blockquote>
-<div class="attribution">
-&#8212; https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx
-</div>
 </div>
 <div class="paragraph">
 <p>And now, this issue can be resolved as the evironment issue.</p>
@@ -157,10 +155,22 @@ if (service.popup &amp;&amp; !service.popup.closed) {
 </ul>
 </div>
 </blockquote>
-<div class="attribution">
-&#8212; https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a href="https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx" class="bare">https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx</a>.</p>
+</li>
+<li>
+<p><a href="https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/" class="bare">https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>]]></description><link>http://www.cooljs.me/2017/07/27/Understand-IE-Protect-Mode-amp-Local-Intranet-Zone.html</link><guid isPermaLink="true">http://www.cooljs.me/2017/07/27/Understand-IE-Protect-Mode-amp-Local-Intranet-Zone.html</guid><category><![CDATA[IE Protect Mode]]></category><category><![CDATA[Local Interanet Zone]]></category><category><![CDATA[troii]]></category><category><![CDATA[oauth2]]></category><category><![CDATA[Domain]]></category><dc:creator><![CDATA[Elvis Zhong]]></dc:creator><pubDate>Thu, 27 Jul 2017 00:00:00 GMT</pubDate></item></channel></rss>
