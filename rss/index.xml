@@ -1,1 +1,166 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Elvis Zhong]]></title><description><![CDATA[Web Developer, Wower]]></description><link>http://www.cooljs.me</link><image><url>/images/idol.jpg</url><title>Elvis Zhong</title><link>http://www.cooljs.me</link></image><generator>RSS for Node</generator><lastBuildDate>Mon, 12 Jun 2017 15:20:25 GMT</lastBuildDate><atom:link href="http://www.cooljs.me/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl></channel></rss>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Elvis Zhong]]></title><description><![CDATA[Web Developer, Wower]]></description><link>http://www.cooljs.me</link><image><url>/images/idol.jpg</url><title>Elvis Zhong</title><link>http://www.cooljs.me</link></image><generator>RSS for Node</generator><lastBuildDate>Thu, 27 Jul 2017 15:22:40 GMT</lastBuildDate><atom:link href="http://www.cooljs.me/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Internet Explorer window.open() return null]]></title><description><![CDATA[<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_troii_facebook_can_not_connect">Troii Facebook can not connect</a></li>
+<li><a href="#_root_cause_analysis">Root Cause Analysis</a>
+<ul class="sectlevel2">
+<li><a href="#_debug_troii_oauth2">Debug troii Oauth2</a></li>
+<li><a href="#_ie_protect_mode">IE Protect Mode</a></li>
+</ul>
+</li>
+<li><a href="#_learned_more">Learned More</a>
+<ul class="sectlevel2">
+<li><a href="#_understand_protected_mode">Understand Protected Mode</a></li>
+<li><a href="#_understand_security_zone">Understand Security Zone</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_troii_facebook_can_not_connect">Troii Facebook can not connect</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="http://www.activitycloud.com/target-marketer">Our product</a> allows customers to cnnect social media accounts for publishing messages, and use data insights to tell customers when people are most likely to interact with their messaging.</p>
+</div>
+<div class="paragraph">
+<p>Recently regression test, QA team report an issue that can not connect Facebook on IE, but it works fine on Chrome and Firefox.</p>
+</div>
+<div class="paragraph">
+<p>We have tested the social media connect process on vitual machine with Window 10 + IE11, it can connect, but it failed on QA&#8217;PC with Windows 10 + IE11.</p>
+</div>
+<div class="paragraph">
+<p>After reviewing recent commits on our repo, there is no changes related to the connect social media process.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_root_cause_analysis">Root Cause Analysis</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We do not have a clue about the issue, and we try to debug the connect process on QA&#8217;PC.</p>
+</div>
+<div class="sect2">
+<h3 id="_debug_troii_oauth2">Debug troii Oauth2</h3>
+<div class="paragraph">
+<p>Base on the error message, after search the <em>troii</em> source code with "Popup could not open or was closed", finnally step in to  <a href="https://github.com/Vestorly/torii/blob/0.6.1/lib/torii/services/popup.js#L79">torii/services/popup.js#L79</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">service.popup = window.open(url, pendingRequestKey, optionsString); <i class="conum" data-value="1"></i><b>(1)</b>
+
+if (service.popup &amp;&amp; !service.popup.closed) {
+  service.popup.focus();
+} else {
+  reject(new Error(
+    'Popup could not open or was closed'));
+  return;
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>service.popup here is <code>null</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We test <code>window.open('http://www.google.com')</code> on console and it returns <code>null</code> value, so the program will goto the <code>else</code> branch and cause this issue happen.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ie_protect_mode">IE Protect Mode</h3>
+<div class="paragraph">
+<p>After google "window.open() return null in IE" and there are many answers on stackoverflow mentions the <em>IE Protect Mode</em>.</p>
+</div>
+<div class="paragraph">
+<p>We just enable the <em>IE Protect Mode</em> on virtual machine, it can not connect Facebook account and throw error "Popup could not open or was closed" like the QA&#8217;PC.</p>
+</div>
+<div class="paragraph">
+<p><em>IE Protect Mode</em> will cause <code>window.open()</code> return <code>null</code> as:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Internet Explorer 7 on Windows Vista: Opening a new window from an application (other than the Internet Explorer process) may result in a null return value. This restriction occurs because Internet Explorer runs in protected mode, by default. One facet of protected mode prevents applications from having privileged access to Internet Explorer when that access spans process boundaries. Opening a new window by using this method generates a new process. For more information about protected mode, see <a href="https://msdn.microsoft.com/zh-cn/library/bb250462(v=vs.85).aspx">Understanding and Working in Protected Mode Internet Explorer</a>. This commonly occurs for applications that host the WebBrowser control.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx
+</div>
+</div>
+<div class="paragraph">
+<p>And now, this issue can be resolved as the evironment issue.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_learned_more">Learned More</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_understand_protected_mode">Understand Protected Mode</h3>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>What&#8217;s the defaul <em>Protect Mode</em> setting</em></p>
+<p>IE will enable <em>Protect Mode</em> for <em>Internet Zone</em> and <em>Restricted sites Zone</em> by default</p>
+</li>
+<li>
+<p><em>When <code>window.open()</code> will return <code>null</code></em></p>
+<p>There are 2 conditions:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Access from one security zone to another security zone, such as: <em>Local Intranet Zone</em> &#8658; <em>Internet Zone</em></p>
+</li>
+<li>
+<p>At least one of the security zones has enabled <em>Protect Zone</em></p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_understand_security_zone">Understand Security Zone</h3>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>How to know current site working in which security zone?</em></p>
+<p>Right click page and choose <em>properties</em>, on the <em>properties</em> tab, check field like: "Zone: Internet | Protected Mode: on".</p>
+</li>
+<li>
+<p><em>How does IE determine a site belongs Local Intranet Zone?</em></p>
+<p>Instead, determination that a site belongs to the <em>Local Intranet Zone</em> is based on a number of rules:</p>
+</li>
+</ol>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="ulist">
+<ul>
+<li>
+<p>Direct Mapping. As with other Zones, users or network admins may map a list of URL patterns into the Local Intranet Zone. This list is viewable by clicking Tools &gt; Internet Options &gt; Security &gt;  Local Intranet &gt; Sites &gt; Advanced.</p>
+</li>
+<li>
+<p>The PlainHostName rule (aka "The Dot rule"). If the URI’s hostname doesn’t contain any periods (e.g. <a href="http://team/" class="bare">http://team/</a>) then it is mapped to the Local Intranet Zone.</p>
+</li>
+<li>
+<p>The fixed Proxy Bypass list. If the user has a fixed proxy specified inside Tools &gt; Internet Options &gt; Connections &gt; LAN Settings, then sites listed to bypass that proxy will be mapped to the Local Intranet zone. The fixed proxy bypass list can be found by clicking the Advanced button; it’s at the bottom of the screen in the box labeled Exceptions.</p>
+</li>
+<li>
+<p>(WPAD) Proxy Script. If the user’s proxy configuration is “Automatically detect settings” or “Use automatic configuration script” inside Tools &gt; Internet Options &gt; Connections &gt; LAN Settings, the browser will run the FindProxyForUrl function in the specified WPAD proxy configuration script to determine which proxy should be used for each request. If the script returns "DIRECT", the browser will bypass the proxy and the site will be mapped into the Local Intranet Zone. When mapping a URL to a Zone, URLMon will call the FindProxyForUrl function to determine if the bypass rule applies. One interesting twist is that the proxy script may itself call dnsResolve to get a site’s IP address and use that information as a part of its determination.</p>
+</li>
+</ul>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/
+</div>
+</div>
+</div>
+</div>
+</div>]]></description><link>http://www.cooljs.me/2017/07/27/Understand-IE-Protect-Mode-amp-Local-Intranet-Zone.html</link><guid isPermaLink="true">http://www.cooljs.me/2017/07/27/Understand-IE-Protect-Mode-amp-Local-Intranet-Zone.html</guid><category><![CDATA[IE Protect Mode]]></category><category><![CDATA[Local Interanet Zone]]></category><category><![CDATA[troii]]></category><category><![CDATA[oauth2]]></category><category><![CDATA[Domain]]></category><dc:creator><![CDATA[Elvis Zhong]]></dc:creator><pubDate>Thu, 27 Jul 2017 00:00:00 GMT</pubDate></item></channel></rss>
