@@ -1,0 +1,85 @@
+= Internet Explorer window.open() return null
+:toc:
+// :hp-image: /covers/cover.png
+:hp-tags: IE Protect Mode, Local Interanet Zone, troii, oauth2, Domain
+:hp-alt-title: Understand IE Protect Mode & Local Intranet Zone
+
+== Troii Facebook can not connect
+
+http://www.activitycloud.com/target-marketer[Our product] allows customers to cnnect social media accounts for publishing messages, and use data insights to tell customers when people are most likely to interact with their messaging.
+
+Recently regression test, QA team report an issue that can not connect Facebook on IE, but it works fine on Chrome and Firefox.
+
+We have tested the social media connect process on vitual machine with Window 10 + IE11, it can connect, but it failed on QA'PC with Windows 10 + IE11.
+
+After reviewing recent commits on our repo, there is no changes related to the connect social media process.
+
+== Root Cause Analysis
+
+We do not have a clue about the issue, and we try to debug the connect process on QA'PC.
+
+=== Debug troii Oauth2
+
+Base on the error message, after search the _troii_ source code with "Popup could not open or was closed", finnally step in to  https://github.com/Vestorly/torii/blob/0.6.1/lib/torii/services/popup.js#L79[torii/services/popup.js#L79]
+
+[source,javascript]
+----
+service.popup = window.open(url, pendingRequestKey, optionsString); // <1>
+
+if (service.popup && !service.popup.closed) {
+  service.popup.focus();
+} else {
+  reject(new Error(
+    'Popup could not open or was closed'));
+  return;
+}
+----
+<1> service.popup here is `null`
+
+We test `window.open('http://www.google.com')` on console and it returns `null` value, so the program will goto the `else` branch and cause this issue happen.
+
+
+=== IE Protect Mode
+
+After google "window.open() return null in IE" and there are many answers on stackoverflow mentions the _IE Protect Mode_.
+
+We just enable the _IE Protect Mode_ on virtual machine, it can not connect Facebook account and throw error "Popup could not open or was closed" like the QA'PC.
+
+_IE Protect Mode_ will cause `window.open()` return `null` as:
+
+[quote, https://msdn.microsoft.com/library/ms536651(v=vs.85).aspx]
+____
+Internet Explorer 7 on Windows Vista: Opening a new window from an application (other than the Internet Explorer process) may result in a null return value. This restriction occurs because Internet Explorer runs in protected mode, by default. One facet of protected mode prevents applications from having privileged access to Internet Explorer when that access spans process boundaries. Opening a new window by using this method generates a new process. For more information about protected mode, see https://msdn.microsoft.com/zh-cn/library/bb250462(v=vs.85).aspx[Understanding and Working in Protected Mode Internet Explorer]. This commonly occurs for applications that host the WebBrowser control.
+____
+
+
+And now, this issue can be resolved as the evironment issue.
+
+
+== Learned More
+
+=== Understand Protected Mode
+[qanda]
+What's the defaul _Protect Mode_ setting::
+IE will enable _Protect Mode_ for _Internet Zone_ and _Restricted sites Zone_ by default
+When `window.open()` will return `null`::
+There are 2 conditions:
+* Access from one security zone to another security zone, such as: _Local Intranet Zone_ => _Internet Zone_
+* At least one of the security zones has enabled _Protect Zone_
+
+=== Understand Security Zone
+
+[qanda]
+How to know current site working in which security zone?::
+  Right click page and choose _properties_, on the _properties_ tab, check field like: "Zone: Internet | Protected Mode: on".
+
+How does IE determine a site belongs Local Intranet Zone?::
+Instead, determination that a site belongs to the _Local Intranet Zone_ is based on a number of rules:
+[quote, https://blogs.msdn.microsoft.com/ieinternals/2012/06/05/the-intranet-zone/]
+____
+* Direct Mapping. As with other Zones, users or network admins may map a list of URL patterns into the Local Intranet Zone. This list is viewable by clicking Tools > Internet Options > Security >  Local Intranet > Sites > Advanced.
+* The PlainHostName rule (aka "The Dot rule"). If the URI’s hostname doesn’t contain any periods (e.g. http://team/) then it is mapped to the Local Intranet Zone.
+* The fixed Proxy Bypass list. If the user has a fixed proxy specified inside Tools > Internet Options > Connections > LAN Settings, then sites listed to bypass that proxy will be mapped to the Local Intranet zone. The fixed proxy bypass list can be found by clicking the Advanced button; it’s at the bottom of the screen in the box labeled Exceptions.
+* (WPAD) Proxy Script. If the user’s proxy configuration is “Automatically detect settings” or “Use automatic configuration script” inside Tools > Internet Options > Connections > LAN Settings, the browser will run the FindProxyForUrl function in the specified WPAD proxy configuration script to determine which proxy should be used for each request. If the script returns "DIRECT", the browser will bypass the proxy and the site will be mapped into the Local Intranet Zone. When mapping a URL to a Zone, URLMon will call the FindProxyForUrl function to determine if the bypass rule applies. One interesting twist is that the proxy script may itself call dnsResolve to get a site’s IP address and use that information as a part of its determination.
+____
+
